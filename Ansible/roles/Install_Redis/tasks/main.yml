@@ -10,6 +10,15 @@
     state: present
 
 
+- name: Copy /etc/hosts file
+  template:
+    src: files/etchost.yaml
+    dest: /etc/hosts
+    owner: root
+    group: root
+    mode: '0644'
+
+
 - name: Add the repo for Redis
   apt_repository:
     repo: "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb jammy main"
@@ -90,6 +99,8 @@
   with_items:
     - redis_7000.service
     - redis_7001.service
+
+
 
 
 
