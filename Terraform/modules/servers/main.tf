@@ -22,17 +22,15 @@ resource "hcloud_server" "monitoring" {
 
 data "hcloud_ssh_key" "key1"  {
   name = "kang"
-
+  
 }
 
 data "hcloud_ssh_key" "key2"  {
   name = "Kangkey"
-
 }
 
 data "hcloud_ssh_key" "key3" {
   name = "ssh_key_bastion"
-
 }
 
 
