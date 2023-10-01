@@ -1,8 +1,6 @@
-
 data "hcloud_server" "redis" {
   count = 3
   name = "redis-${count.index}"
-
 }
 
 resource "hcloud_volume" "osd_volumes" {

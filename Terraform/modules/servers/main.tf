@@ -1,6 +1,6 @@
 resource "hcloud_server" "redis" {
   count = 3
-  name         = "mon-${count.index}"
+  name         = "redis-${count.index}"
   image        = var.image_name
   server_type  = "cx21"
   ssh_keys = [data.hcloud_ssh_key.key1.id,data.hcloud_ssh_key.key2.id,data.hcloud_ssh_key.key3.id]
@@ -15,7 +15,6 @@ resource "hcloud_server" "monitoring" {
   server_type  = "cx21"
   ssh_keys = [data.hcloud_ssh_key.key1.id,data.hcloud_ssh_key.key2.id,data.hcloud_ssh_key.key3.id]
   location = var.location
-
 }
 
 
