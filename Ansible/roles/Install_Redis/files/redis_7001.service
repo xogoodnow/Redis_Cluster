@@ -1,0 +1,14 @@
+[Unit]
+Description=Redis key-value database on 7001
+After=network.target
+[Service]
+ExecStart=/usr/bin/redis-server /etc/redis/cluster/7001/redis_7001.conf --supervised systemd
+ExecStop=/bin/redis-cli -h 127.0.0.1 -p 7001 shutdown
+Type=notify
+User=redis
+Group=redis
+RuntimeDirectory=/etc/redis/cluster/7001
+RuntimeDirectoryMode=0755
+LimitNOFILE=65535
+[Install]
+WantedBy=multi-user.target

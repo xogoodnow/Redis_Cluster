@@ -1,0 +1,102 @@
+---
+- name: check connectivity
+  ping:
+    data: alive
+
+- name: Add the GPG key for Redis
+  apt_key:
+    url: https://packages.redis.io/gpg
+    keyring: /usr/share/keyrings/redis-archive-keyring.gpg
+    state: present
+
+
+- name: Add the repo for Redis
+  apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb jammy main"
+    state: present
+
+
+- name: Update the repositories
+  apt:
+    update_cache: yes
+
+
+- name: Install Redis on the node
+  apt:
+    state: present
+    pkg:
+      - redis
+
+
+
+- name: Create the required directories
+  file:
+    path: {{ item }}
+    state: directory
+    owner: redis
+    group: redis
+    mode: 0770
+  with_items:
+    - /etc/redis/cluster
+    - /etc/redis/cluster/7000
+    - /var/lib/redis/7000
+    - /etc/redis/cluster/7001
+    - /var/lib/redis/7001
+
+
+
+- name: Set the config file for Redis master instances
+  template:
+    dest: /etc/redis/cluster/7000/redis_7000.conf
+    src: templates/redis_7000.conf
+  vars:
+    redis_password: "{{ redis_password }}"
+
+
+
+- name: Set the config file for Redis slave instances
+  template:
+    dest: /etc/redis/cluster/7001/redis_7001.conf
+    src: templates/redis_7001.conf
+  vars:
+    redis_password: "{{ redis_password }}"
+
+
+
+- name: Define the service for Redis masters
+  copy:
+    src: files/redis_7000.service
+    dest: files/redis_7000.service
+    mode: 0777
+    owner: root
+    group: root
+
+
+
+- name: Define the service for Redis slaves
+  copy:
+    src: files/redis_7001.service
+    dest: files/redis_7001.service
+    mode: 0777
+    owner: root
+    group: root
+
+
+- name: Start and enable redis services
+  systemd:
+    name: {{ item }}
+    state: restarted
+    enabled: true
+  with_items:
+    - redis_7000.service
+    - redis_7001.service
+
+
+
+
+
+
+
+
+
+
