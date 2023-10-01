@@ -1,0 +1,49 @@
+---
+- name: setting up Ceph object storage cluster
+  hosts: all
+  become: true
+  tasks:
+    - name: Include variables
+      include_vars: "all.yaml"
+
+    - name: Setting the basis on all nodes
+      include_role:
+        name: "{{ item }}"
+      with_items:
+        - $PWD/roles/Pre_Setup
+        - $PWD/roles/OS_Tuning
+
+
+    - name: Install and Configure Redis instances
+      include_role:
+        name: "{{ item }}"
+      with_items:
+        - $PWD/roles/Install_Redis
+      when: mode == 'redis'
+
+
+
+    - name: Init Redis cluster
+      include_role:
+        name: "{{ item }}"
+      with_items:
+        - $PWD/roles/Init_Cluster
+      when: mode == 'redis' and init_cluster == 'true'
+
+
+    - name: Deploy Node exporter on all nodes
+      include_role:
+        name: "{{ item }}"
+      with_items:
+        - $PWD/roles/Exporters/Node_Exporter
+
+
+    - name: Set up the monitoring stack
+      include_role:
+        name: "{{ item }}"
+      with_items:
+        - $PWD/roles/Victoria_Metrics
+      when: mode == 'monitoring'
+
+
+
