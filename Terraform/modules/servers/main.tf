@@ -47,6 +47,16 @@ resource "local_file" "inventory" {
 }
 
 
+resource "local_file" "etcd-hosts" {
+  content  = templatefile("${path.module}/etchost.tpl",
+    {
+      redis_ips = hcloud_server.redis.*.ipv4_address
+      monitoring_ips = hcloud_server.monitoring.*.ipv4_address
+    }
+  )
+  filename = "${path.module}/../../../Ansible/roles/Install_Redis/files/etchost.yaml"
+}
+
 
 
 
