@@ -40,7 +40,7 @@
 
 - name: Create the required directories
   file:
-    path: {{ item }}
+    path: "{{ item }}"
     state: directory
     owner: redis
     group: redis
@@ -75,7 +75,7 @@
 - name: Define the service for Redis masters
   copy:
     src: files/redis_7000.service
-    dest: files/redis_7000.service
+    dest: /etc/systemd/system/redis_7000.service
     mode: 0777
     owner: root
     group: root
@@ -85,7 +85,7 @@
 - name: Define the service for Redis slaves
   copy:
     src: files/redis_7001.service
-    dest: files/redis_7001.service
+    dest: /etc/systemd/system/redis_7001.service
     mode: 0777
     owner: root
     group: root
@@ -93,7 +93,7 @@
 
 - name: Start and enable redis services
   systemd:
-    name: {{ item }}
+    name: "{{ item }}"
     state: restarted
     enabled: true
   with_items:
