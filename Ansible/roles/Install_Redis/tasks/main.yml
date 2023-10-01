@@ -101,12 +101,6 @@
     - redis_7001.service
 
 
-- name: Initialize the cluster
-  command:
-    cmd: redis-cli --cluster create redis-0:7000 redis-1:7000 redis-2:7000 redis-0:7001 redis-1:7001 redis-2:7001 --cluster-replicas 1 -a "{{ redis_password }}"
-  when: mode == 'redis' and init_cluster == 'true'
-
-
 
 
 
