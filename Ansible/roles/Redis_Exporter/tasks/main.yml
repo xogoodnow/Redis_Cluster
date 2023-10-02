@@ -8,7 +8,6 @@
     update_cache: yes
     upgrade: dist
 
-
 - name: pull the required image for Node Exporter
   docker_image:
     name: prom/node-exporter
@@ -24,10 +23,5 @@
     command:
       - "--redis.addr=localhost:7000"
       - "--is-cluster"
-      - "--redis.password {{ redis_password }}"
+      - '--redis.password="{{ redis_password }}"'
     network_mode: host
-
-
-
-
-

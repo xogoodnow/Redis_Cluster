@@ -31,6 +31,16 @@
     state: present
 
 
+- name: Copy /etc/hosts file
+  template:
+    src: files/etchost.yaml
+    dest: /etc/hosts
+    owner: root
+    group: root
+    mode: '0644'
+
+
+
 - name: set resolve conf config
   copy:
     dest: /etc/resolvconf/resolv.conf.d/head
