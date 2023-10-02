@@ -8,20 +8,17 @@
     update_cache: yes
     upgrade: dist
 
-- name: pull the required image for Node Exporter
+- name: pull the required image for Redis Exporter
   docker_image:
-    name: prom/node-exporter
-    tag: "{{ redis_exporter_version }}"
+    name: bitnami/redis-exporter:{{ redis_exporter_version }}
     source: pull
 
-- name: Run the container for Node Exporter
+- name: Run the container for Redis Exporter
   docker_container:
     name: redis_exporter
     image: bitnami/redis-exporter:{{ redis_exporter_version }}
     restart_policy: unless-stopped
     state: started
-    command:
-      - "--redis.addr=localhost:7000"
-      - "--is-cluster"
-      - '--redis.password="{{ redis_password }}"'
+    restart: true
+    command: "--redis.addr=localhost:7000 --is-cluster --redis.password='{{ redis_password }}'"
     network_mode: host
