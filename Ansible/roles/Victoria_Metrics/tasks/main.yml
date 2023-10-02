@@ -54,6 +54,7 @@
     mode: 0777
   with_items:
     - 1860.json
+    - 12776.json
 
 
 - name: Copy Prometheus files
