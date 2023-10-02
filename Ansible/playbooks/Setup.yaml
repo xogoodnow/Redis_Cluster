@@ -37,6 +37,7 @@
         name: "{{ item }}"
       with_items:
         - $PWD/roles/Node_Exporter
+      when: mode == 'monitoring'
 
 
     - name: Deploy Redis exporter on redis nodes
