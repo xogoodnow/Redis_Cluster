@@ -1,0 +1,33 @@
+---
+- name: check connectivity
+  ping:
+    data: alive
+
+- name: update and upgrade system
+  apt:
+    update_cache: yes
+    upgrade: dist
+
+
+- name: pull the required image for Node Exporter
+  docker_image:
+    name: prom/node-exporter
+    tag: "{{ redis_exporter_version }}"
+    source: pull
+
+- name: Run the container for Node Exporter
+  docker_container:
+    name: redis_exporter
+    image: bitnami/redis-exporter:{{ redis_exporter_version }}
+    restart_policy: unless-stopped
+    state: started
+    command:
+      - "--redis.addr=localhost:7000"
+      - "--is-cluster"
+      - "--redis.password {{ redis_password }}"
+    network_mode: host
+
+
+
+
+
