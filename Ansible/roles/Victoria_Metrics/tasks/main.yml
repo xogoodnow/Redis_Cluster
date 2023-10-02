@@ -54,7 +54,6 @@
     mode: 0777
   with_items:
     - 1860.json
-    - 12776.json
 
 
 - name: Copy Prometheus files
@@ -97,6 +96,7 @@
     name: node-exporter
     image: prom/node-exporter:{{ node_exporter_version }}
     restart_policy: unless-stopped
+    restart: true
     state: started
     command:
       - '--path.procfs=/host/proc'
@@ -117,8 +117,11 @@
   docker_container:
     name: vmagent
     state: started
+
     image: victoriametrics/vmagent:{{ vmagent_version }}
     restart_policy: unless-stopped
+    restart: true
+
     published_ports:
       - 8429:8429
     volumes:
@@ -136,6 +139,7 @@
   docker_container:
     name: victoriametrics
     state: started
+    restart: true
     image: victoriametrics/victoria-metrics:{{ victoria_metrics_version }}
     restart_policy: unless-stopped
     published_ports:
@@ -163,6 +167,8 @@
   docker_container:
     name: grafana
     state: started
+    restart: true
+
     image: grafana/grafana:{{ grafana_version }}
     restart_policy: unless-stopped
     published_ports:
@@ -180,6 +186,8 @@
     name: vmalert
     image: victoriametrics/vmalert:{{ vmalert_version }}
     state: started
+    restart: true
+
     restart_policy: unless-stopped
     network_mode: host
     published_ports:
@@ -203,6 +211,8 @@
   docker_container:
     name: alertmanager
     state: started
+    restart: true
+
     image: prom/alertmanager:{{ alertmanager_version }}
     restart_policy: unless-stopped
     published_ports:
