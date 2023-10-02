@@ -6,3 +6,4 @@ grafana_version: latest
 vmalert_version: latest
 alertmanager_version: latest
 node_exporter_version: latest
+redis_exporter_version: latest
