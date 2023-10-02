@@ -1,5 +1,5 @@
 ---
-- name: setting up Ceph object storage cluster
+- name: setting up Redis cluster
   hosts: all
   become: true
   tasks:
