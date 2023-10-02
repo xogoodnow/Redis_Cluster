@@ -22,24 +22,22 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
       - targets:
-          - localhost:9100
-          - :9100
-          -
+          - monitoring-0:9100
+          - monitoring-1:9100
+          - redis-0:9100
+          - redis-1:9100
+          - redis-2:9100
 
 
-
-  - job_name: 'ceph_exporter'
+  - job_name: 'Redis_exporter'
     scrape_interval: 5s
     static_configs:
       - targets:
-          - mon-0:9128
-          - mon-1:9128
-          - mon-2:9128
-          - osd-0:9128
-          - osd-1:9128
-          - osd-2:9128
-          - rgw-0:9128
-          - rgw-1:9128
+          - monitoring-0:9121
+          - monitoring-1:9121
+          - redis-0:9121
+          - redis-1:9121
+          - redis-2:9121
 
 
 
