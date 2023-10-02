@@ -12,6 +12,7 @@
       with_items:
         - $PWD/roles/Pre_Setup
         - $PWD/roles/OS_Tuning
+        - $PWD/roles/Install_Docker
 
 
     - name: Install and Configure Redis instances
@@ -35,8 +36,15 @@
       include_role:
         name: "{{ item }}"
       with_items:
-        - $PWD/roles/Exporters/Node_Exporter
+        - $PWD/roles/Node_Exporter
 
+
+    - name: Deploy Redis exporter on redis nodes
+      include_role:
+        name: "{{ item }}"
+      with_items:
+        - $PWD/roles/Redis_Exporter
+      when: mode == 'redis'
 
     - name: Set up the monitoring stack
       include_role:
