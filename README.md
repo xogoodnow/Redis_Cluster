@@ -94,5 +94,14 @@ redis-cli -c -h localhost -p 7000 -a "YOUR_PASSWORD"
 ![image](https://s3.ir-thr-at1.arvanstorage.ir/kangredis/redis_grafana.gif)
 
 
+* To Clean up everything (including the nodes themselvs)
+``` bash
+terraform destroy
+```
+![image](https://s3.ir-thr-at1.arvanstorage.ir/kangredis/redis_terraform_destroy.gif)
+
+
+
+
 
 
