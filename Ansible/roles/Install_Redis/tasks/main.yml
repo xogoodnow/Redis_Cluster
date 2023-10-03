@@ -44,7 +44,8 @@
     - /var/lib/redis/7000
     - /etc/redis/cluster/7001
     - /var/lib/redis/7001
-
+    - /etc/redis/cluster/7002
+    - /var/lib/redis/7002
 
 
 - name: Set the config file for Redis master instances
@@ -62,6 +63,15 @@
     src: templates/redis_7001.conf
   vars:
     redis_password: "{{ redis_password }}"
+
+
+- name: Set the config file for extra Redis replica instances
+  template:
+    dest: /etc/redis/cluster/7002/redis_7002.conf
+    src: templates/redis_7002.conf
+  vars:
+    redis_password: "{{ redis_password }}"
+
 
 
 
@@ -84,6 +94,15 @@
     group: root
 
 
+- name: Define the service for extra Redis replicas
+  copy:
+    src: files/redis_7002.service
+    dest: /etc/systemd/system/redis_7002.service
+    mode: 0777
+    owner: root
+    group: root
+
+
 - name: Start and enable redis services
   systemd:
     name: "{{ item }}"
@@ -92,6 +111,7 @@
   with_items:
     - redis_7000.service
     - redis_7001.service
+    - redis_7002.service
 
 
 
