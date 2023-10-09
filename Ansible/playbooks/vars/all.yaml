@@ -7,3 +7,6 @@ vmalert_version: latest
 alertmanager_version: latest
 node_exporter_version: latest
 redis_exporter_version: latest
+redis_version: latest
+redis_master_port: 7000
+redis_slave_port: 7001
