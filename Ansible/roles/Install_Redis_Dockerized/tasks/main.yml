@@ -10,7 +10,7 @@
     state: directory
     owner: root
     group: root
-    mode: 0770
+    mode: 0777
   with_items:
     - /etc/redis/cluster
     - /etc/redis/cluster/7000
@@ -25,7 +25,6 @@
   docker_image:
     name: redis:{{ redis_version }}
     source: pull
-
 
 
 - name: Set the config file for Redis master instances
@@ -48,34 +47,40 @@
 
 
 
+
+
+
 - name: Run the master redis container
   docker_container:
-    name: "{{ ansible_host }}"-redis-master
+    name: "{{ ansible_host }}-redis-master"
     image: redis:{{ redis_version }}
     restart_policy: unless-stopped
     state: started
     network_mode: host
+    command: redis-server /etc/redis/cluster/7000/redis_7000.conf
     volumes:
       - /var/lib/redis/7000/:/var/lib/redis/7000/
-      - /etc/redis/cluster/7000/nodes_7000.conf:/etc/redis/cluster/7000/nodes_7000.conf
-      - /var/run/redis/redis_7000.pid:/var/run/redis/redis_7000.pid
-      - /var/log/redis/redis_7000.log:/var/log/redis/redis_7000.log
+      - /etc/redis/cluster/7000/:/etc/redis/cluster/7000/
+      - /var/run/redis/:/var/run/redis/
+      - /var/log/redis/:/var/log/redis/
 
 
 
 
 - name: Run the master redis container
   docker_container:
-    name: "{{ ansible_host }}"-redis-slave
+    name: "{{ ansible_host }}-redis-slave"
     image: redis:{{ redis_version }}
     restart_policy: unless-stopped
     network_mode: host
     state: started
+    command: redis-server /etc/redis/cluster/7001/redis_7001.conf
     volumes:
       - /var/lib/redis/7001/:/var/lib/redis/7001/
-      - /etc/redis/cluster/7001/nodes_7001.conf:/etc/redis/cluster/7001/nodes_7001.conf
-      - /var/run/redis/redis_7001.pid:/var/run/redis/redis_7001.pid
-      - /var/log/redis/redis_7001.log:/var/log/redis/redis_7001.log
+      - /etc/redis/cluster/7001/:/etc/redis/cluster/7001/
+      - /var/run/redis/:/var/run/redis/
+      - /var/log/redis/:/var/log/redis/
+
 
 
 
