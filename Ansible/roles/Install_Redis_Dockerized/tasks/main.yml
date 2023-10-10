@@ -10,16 +10,30 @@
     state: directory
     owner: root
     group: root
-    mode: 0777
+    mode: "0777"
   with_items:
     - /etc/redis/cluster
     - /etc/redis/cluster/7000
     - /var/lib/redis/7000
     - /etc/redis/cluster/7001
     - /var/lib/redis/7001
+    - /var/run/redis/
+    - /var/log/redis/
 
 
-
+- name: Create log and pid file
+  file:
+    mode: "0777"
+    state: touch
+    owner: root
+    group: root
+    force: true
+    path: "{{ item }}"
+  with_items:
+    - /var/run/redis/redis_7000.pid
+    - /var/log/redis/redis_7000.log
+    - /var/run/redis/redis_7001.pid
+    - /var/log/redis/redis_7001.log
 
 - name: Pull the redis image
   docker_image:
@@ -31,6 +45,7 @@
   template:
     dest: /etc/redis/cluster/7000/redis_7000.conf
     src: templates/redis_7000.conf
+    mode: "0777"
   vars:
     redis_password: "{{ redis_password }}"
     redis_slave_port: "{{ redis_master_port }}"
@@ -41,6 +56,7 @@
   template:
     dest: /etc/redis/cluster/7001/redis_7001.conf
     src: templates/redis_7001.conf
+    mode: "0777"
   vars:
     redis_password: "{{ redis_password }}"
     redis_slave_port: "{{ redis_slave_port }}"
@@ -60,14 +76,14 @@
     command: redis-server /etc/redis/cluster/7000/redis_7000.conf
     volumes:
       - /var/lib/redis/7000/:/var/lib/redis/7000/
-      - /etc/redis/cluster/7000/:/etc/redis/cluster/7000/
-      - /var/run/redis/:/var/run/redis/
-      - /var/log/redis/:/var/log/redis/
+      - /etc/redis/cluster/7000/redis_7000.conf:/etc/redis/cluster/7000/redis_7000.conf
+      - /var/run/redis/redis_7000.pid:/var/run/redis/redis_7000.pid
+      - /var/log/redis/redis_7000.log:/var/log/redis/redis_7000.log
 
 
 
 
-- name: Run the master redis container
+- name: Run the slave redis container
   docker_container:
     name: "{{ ansible_host }}-redis-slave"
     image: redis:{{ redis_version }}
@@ -77,9 +93,9 @@
     command: redis-server /etc/redis/cluster/7001/redis_7001.conf
     volumes:
       - /var/lib/redis/7001/:/var/lib/redis/7001/
-      - /etc/redis/cluster/7001/:/etc/redis/cluster/7001/
-      - /var/run/redis/:/var/run/redis/
-      - /var/log/redis/:/var/log/redis/
+      - /etc/redis/cluster/7001/redis_7001.conf:/etc/redis/cluster/7001/redis_7001.conf
+      - /var/run/redis/redis_7001.pid:/var/run/redis/redis_7001.pid
+      - /var/log/redis/redis_7001.log:/var/log/redis/redis_7001.log
 
 
 
