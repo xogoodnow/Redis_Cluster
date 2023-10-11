@@ -19,7 +19,7 @@
       include_role:
         name: "{{ item }}"
       with_items:
-        - $PWD/roles/Install_Redis
+        - $PWD/roles/Install_Redis_Dockerized
       when: mode == 'redis'
 
 
