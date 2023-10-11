@@ -68,7 +68,7 @@
 
 - name: Run the master redis container
   docker_container:
-    name: "{{ ansible_host }}-redis-master"
+    name: "{{ ansible_hostname }}-redis-master"
     image: redis:{{ redis_version }}
     restart_policy: unless-stopped
     state: started
@@ -85,7 +85,7 @@
 
 - name: Run the slave redis container
   docker_container:
-    name: "{{ ansible_host }}-redis-slave"
+    name: "{{ ansible_hostname }}-redis-slave"
     image: redis:{{ redis_version }}
     restart_policy: unless-stopped
     network_mode: host
