@@ -33,8 +33,7 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
       - targets:
-          - monitoring-0:9121
-          - monitoring-1:9121
+
           - redis-0:9121
           - redis-1:9121
           - redis-2:9121
