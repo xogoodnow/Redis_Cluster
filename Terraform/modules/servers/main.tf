@@ -45,7 +45,7 @@ resource "local_file" "inventory" {
 }
 
 
-resource "local_file" "etcd-hosts" {
+resource "local_file" "etc-hosts" {
   content  = templatefile("${path.module}/etchost.tpl",
     {
       redis_ips = hcloud_server.redis.*.ipv4_address
