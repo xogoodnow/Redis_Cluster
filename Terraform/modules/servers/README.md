@@ -1,7 +1,7 @@
 ## What this module does
 
 * Creats the servers according to:
-  * The number which is given for each type (osd, rgw, mon)
+  * The number of servers for redis cluster
   * Image provided
   * Flavor provided
   * Name provided
