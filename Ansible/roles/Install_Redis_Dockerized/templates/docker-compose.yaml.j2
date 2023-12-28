@@ -1,0 +1,31 @@
+version: "3.8"
+services:
+  redis-master:
+    container_name: "redis-master-{{ ansible_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) }}"
+    command: redis-server /etc/redis/cluster/7000/redis_7000.conf
+    image: "redis:{{ redis_version }}"
+    volumes:
+      - /var/lib/redis/7000/:/var/lib/redis/7000/
+      - /etc/redis/cluster/7000/redis_7000.conf:/etc/redis/cluster/7000/redis_7000.conf
+#      - /var/run/redis/redis_7000.pid:/var/run/redis/redis_7000.pid
+#      - /var/log/redis/redis_7000.log:/var/log/redis/redis_7000.log
+    restart: unless-stopped
+    network_mode: host
+
+
+  redis-slave:
+    container_name: "redis-slave-{{ ansible_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) }}"
+    command: redis-server /etc/redis/cluster/7001/redis_7001.conf
+    image: "redis:{{ redis_version }}"
+    volumes:
+      - /var/lib/redis/7001/:/var/lib/redis/7001/
+      - /etc/redis/cluster/7001/redis_7001.conf:/etc/redis/cluster/7001/redis_7001.conf
+#      - /var/run/redis/redis_7001.pid:/var/run/redis/redis_7001.pid
+#      - /var/log/redis/redis_7001.log:/var/log/redis/redis_7001.log
+    restart: unless-stopped
+    network_mode: host
+
+
+
+
+
