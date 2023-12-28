@@ -63,7 +63,7 @@
     redis_slave_port: "{{ redis_slave_port }}"
 
 
-- name: Set the parser for fluentbit
+- name: Set the compose file for redis
   template:
     src: "templates/docker-compose.yaml.j2"
     dest: "/root/redis/docker-compose.yaml"
@@ -113,9 +113,3 @@
 #      - /etc/redis/cluster/7001/redis_7001.conf:/etc/redis/cluster/7001/redis_7001.conf
 ##      - /var/run/redis/redis_7001.pid:/var/run/redis/redis_7001.pid
 ##      - /var/log/redis/redis_7001.log:/var/log/redis/redis_7001.log
-
-
-
-
-
-
