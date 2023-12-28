@@ -5,7 +5,7 @@
 
 - name: Run a the init command
   community.docker.docker_container_exec:
-    container: "{{ ansible_hostname }}-redis-master"
+    container: "redis-master-{{ ansible_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) }}"
     command: redis-cli --cluster create redis-0:7000 redis-1:7000 redis-2:7000 redis-0:7001 redis-1:7001 redis-2:7001  --cluster-replicas 1 -a "{{ redis_password }}" --cluster-yes
   register: result
 
