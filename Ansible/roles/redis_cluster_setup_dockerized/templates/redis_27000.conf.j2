@@ -1,6 +1,6 @@
 bind 0.0.0.0 ::1
 protected-mode yes
-port {{ redis_master_port }}
+port {{ redis_non_tls_port }}
 cluster-enabled yes
 
 #value of somaxconn and tcp_max_syn_backlog
@@ -26,14 +26,22 @@ cluster-enabled yes
 # to unlimited size. The default size is 20480.
 # tls-session-cache-size 5000
 
+tls-port {{ redis_master_port }}
+tls-cluster yes
+tls-cert-file {{ redis_certificates_base_path }}redis.crt
+tls-key-file {{ redis_certificates_base_path }}redis.key
+tls-ca-cert-file {{ redis_certificates_base_path }}ca.crt
+tls-auth-clients no
+tls-replication yes
+~
 
 #   supervised systemd - signal systemd by writing READY=1 to $NOTIFY_SOCKET
 supervised no
 
-
+enable-debug-command yes
 #pidfile /var/run/redis/redis_7000.pid
 
-
+daemonize no
 
 
 # This can be one of:
@@ -112,7 +120,7 @@ rdb-del-sync-files no
 # The Append Only File will also be created inside this directory.
 #
 # Note that you must specify a directory here, not a file name.
-dir /var/lib/redis/7000/
+dir {{ redis_directory_base_path }}Redis/Data/{{ redis_master_port }}/
 
 
 
@@ -124,8 +132,8 @@ dir /var/lib/redis/7000/
 # masterauth <master-password>
 #
 
-requirepass {{ redis_password }}
-masterauth {{ redis_password }}
+#requirepass {{ redis_password }}
+#masterauth {{ redis_password }}
 
 
 
@@ -251,7 +259,7 @@ maxclients 10000
 # threads, if you have a 8 cores, try to use 6 threads. In order to
 # enable I/O threads use the following configuration directive:
 #
-io-threads 6
+#io-threads 6
 #
 
 appendonly no

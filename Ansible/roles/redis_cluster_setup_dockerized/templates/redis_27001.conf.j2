@@ -1,6 +1,6 @@
 bind 0.0.0.0 ::1
 protected-mode yes
-port {{ redis_slave_port }}
+port {{ redis_non_tls_port }}
 cluster-enabled yes
 
 #value of somaxconn and tcp_max_syn_backlog
@@ -26,14 +26,22 @@ cluster-enabled yes
 # to unlimited size. The default size is 20480.
 # tls-session-cache-size 5000
 
+tls-port {{ redis_slave_port }}
+tls-cluster yes
+tls-cert-file {{ redis_certificates_base_path }}redis.crt
+tls-key-file {{ redis_certificates_base_path }}redis.key
+tls-ca-cert-file {{ redis_certificates_base_path }}ca.crt
+tls-auth-clients no
+tls-replication yes
+~
 
 #   supervised systemd - signal systemd by writing READY=1 to $NOTIFY_SOCKET
 supervised no
 
+enable-debug-command yes
+#pidfile /var/run/redis/redis_7000.pid
 
-#pidfile /var/run/redis/redis_7001.pid
-
-
+daemonize no
 
 
 # This can be one of:
@@ -45,7 +53,7 @@ supervised no
 loglevel notice
 
 
-#logfile /var/log/redis/redis_7001.log
+#logfile /var/log/redis/redis_7000.log
 
 
 # Unless specified otherwise, by default Redis will save the DB:
@@ -112,7 +120,7 @@ rdb-del-sync-files no
 # The Append Only File will also be created inside this directory.
 #
 # Note that you must specify a directory here, not a file name.
-dir /var/lib/redis/7001/
+dir {{ redis_directory_base_path }}Redis/Data/{{ redis_slave_port }}/
 
 
 
@@ -124,8 +132,8 @@ dir /var/lib/redis/7001/
 # masterauth <master-password>
 #
 
-requirepass {{ redis_password }}
-masterauth {{ redis_password }}
+#requirepass {{ redis_password }}
+#masterauth {{ redis_password }}
 
 
 
@@ -148,6 +156,7 @@ replica-serve-stale-data yes
 
 
 replica-read-only yes
+
 
 
 # WARNING: Since in this setup the replica does not immediately store an RDB on
@@ -250,7 +259,7 @@ maxclients 10000
 # threads, if you have a 8 cores, try to use 6 threads. In order to
 # enable I/O threads use the following configuration directive:
 #
-io-threads 6
+#io-threads 6
 #
 
 appendonly no
@@ -277,7 +286,7 @@ appendfsync everysec
 # cluster-node-timeout 15000
 cluster-node-timeout 5000
 
-#cluster-config-file /etc/redis/cluster/7001/redis_7000.conf
+#cluster-config-file /etc/redis/cluster/7000/redis_7000.conf
 
 
 # cluster-replica-validity-factor 10
@@ -355,5 +364,3 @@ rdb-save-incremental-fsync yes
 #   redis-benchmark -n 1000000 incr foo
 #   redis-cli object freq foo
 #
-
-
