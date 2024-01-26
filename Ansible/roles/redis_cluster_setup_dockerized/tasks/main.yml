@@ -3,6 +3,23 @@
   ping:
     data: alive
 
+
+- name: Copy the certs to the nodes
+  copy:
+    src: "files/{{ item }}"
+    dest: "{{ redis_certificates_base_path }}"
+    force: true
+  with_items:
+    - "ca.crt"
+    - "ca.key"
+    - "cert.conf"
+    - "csr.conf"
+    - "redis.crt"
+    - "redis.csr"
+    - "redis.key"
+
+
+
 - name: Pull the redis image
   docker_image:
     name: "{{  redis_base_image }}:{{ redis_version }}"
