@@ -10,3 +10,4 @@ redis_exporter_version: latest
 redis_version: latest
 redis_master_port: 27000
 redis_slave_port: 27001
+node_exporter_base_image: prom/node-exporter
