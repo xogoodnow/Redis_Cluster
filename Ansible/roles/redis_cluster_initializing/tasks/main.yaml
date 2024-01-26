@@ -5,8 +5,8 @@
 
 - name: Run a the init command
   community.docker.docker_container_exec:
-    container: "redis-master-{{ ansible_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) }}"
-    command: redis-cli --cluster create redis-0:7000 redis-1:7000 redis-2:7000 redis-0:7001 redis-1:7001 redis-2:7001  --cluster-replicas 1 -a "{{ redis_password }}" --cluster-yes
+    container: "redis-master-{{ ansible_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) +1 }}"
+    command: "redis-cli --cluster create redis-1:{{ redis_master_port }} redis-2:{{ redis_master_port }} redis-3:{{ redis_master_port }} redis-1:{{ redis_slave_port }} redis-2:{{ redis_slave_port }} redis-3:{{ redis_slave_port }}  --cluster-replicas 1 -a "{{ redis_password }}" --cluster-yes"
   register: result
 
 - name: Print out the result of the init command
