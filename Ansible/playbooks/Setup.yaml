@@ -10,16 +10,16 @@
       include_role:
         name: "{{ item }}"
       with_items:
-        - $PWD/roles/Pre_Setup
-        - $PWD/roles/OS_Tuning
-        - $PWD/roles/Install_Docker
+        - $PWD/roles/pre_setup
+        - $PWD/roles/redis_os_tuning
+        - $PWD/roles/install_docker
 
 
     - name: Install and Configure Redis instances
       include_role:
         name: "{{ item }}"
       with_items:
-        - $PWD/roles/Install_Redis_Dockerized
+        - $PWD/roles/redis_cluster_setup_dockerized
       when: mode == 'redis'
 
 
@@ -28,7 +28,7 @@
       include_role:
         name: "{{ item }}"
       with_items:
-        - $PWD/roles/Init_Cluster
+        - $PWD/roles/redis_cluster_initializing
       when: mode == 'redis' and init_cluster == 'true'
 
 
@@ -36,7 +36,7 @@
       include_role:
         name: "{{ item }}"
       with_items:
-        - $PWD/roles/Node_Exporter
+        - $PWD/roles/node_exporter_setup_dockerized
       when: mode == 'monitoring'
 
 
@@ -44,14 +44,14 @@
       include_role:
         name: "{{ item }}"
       with_items:
-        - $PWD/roles/Redis_Exporter
+        - $PWD/roles/redis_exporter_setup_dockerized
       when: mode == 'redis'
 
     - name: Set up the monitoring stack
       include_role:
         name: "{{ item }}"
       with_items:
-        - $PWD/roles/Victoria_Metrics
+        - $PWD/roles/victoria_metrics_setup_dockerized
       when: mode == 'monitoring'
 
 
