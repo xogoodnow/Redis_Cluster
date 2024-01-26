@@ -1,5 +1,5 @@
 name_server: 8.8.8.8
-redis_password: JBHVF*(IUBHOiytf87fygiHUOGF*&fg)
+redis_password: BIVIGIHUt78gh8ujhol
 vmagent_version: latest
 victoria_metrics_version: latest
 grafana_version: latest
@@ -8,5 +8,5 @@ alertmanager_version: latest
 node_exporter_version: latest
 redis_exporter_version: latest
 redis_version: latest
-redis_master_port: 7000
-redis_slave_port: 7001
+redis_master_port: 27000
+redis_slave_port: 27001
