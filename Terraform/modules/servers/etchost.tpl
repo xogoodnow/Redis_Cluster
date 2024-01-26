@@ -1,7 +1,7 @@
 127.0.0.1 localhost
 
 %{ for index, ip in redis_ips }
-${ip} redis-${index}
+${ip} redis-${index + 1 }
 %{ endfor }
 
 %{ for index, ip in monitoring_ips }
