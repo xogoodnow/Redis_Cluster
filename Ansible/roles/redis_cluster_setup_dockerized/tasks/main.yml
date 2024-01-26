@@ -5,29 +5,29 @@
 
 - name: Pull the redis image
   docker_image:
-    name: redis:{{ redis_version }}
+    name: "{{  redis_base_image }}:{{ redis_version }}"
     source: pull
 
 
 - name: Set the config file for Redis master instances
   template:
-    dest: /etc/redis/cluster/7000/redis_7000.conf
-    src: templates/redis_7000.conf
+    dest: "{{ redis_directory_base_path }}Redis/Config/{{ redis_master_port }}/redis_{{ redis_master_port }}.conf"
+    src: templates/redis_27000.conf
     mode: "0777"
-  vars:
-    redis_password: "{{ redis_password }}"
-    redis_slave_port: "{{ redis_master_port }}"
+#  vars:
+#    redis_password: "{{ redis_password }}"
+#    redis_slave_port: "{{ redis_master_port }}"
 
 
 
 - name: Set the config file for Redis slave instances
   template:
-    dest: /etc/redis/cluster/7001/redis_7001.conf
+    dest: "{{ redis_directory_base_path }}Redis/Config/{{ redis_slave_port }}/redis_{{ redis_slave_port }}.conf"
     src: templates/redis_7001.conf
     mode: "0777"
-  vars:
-    redis_password: "{{ redis_password }}"
-    redis_slave_port: "{{ redis_slave_port }}"
+#  vars:
+#    redis_password: "{{ redis_password }}"
+#    redis_slave_port: "{{ redis_slave_port }}"
 
 
 - name: Set the compose file for redis
