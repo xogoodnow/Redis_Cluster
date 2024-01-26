@@ -12,6 +12,7 @@
     state: present
     reload: true
   with_items:
+    - { name: "vm.overcommit_memory", value: '1' }
     - { name: "net.ipv4.ip_forward", value: '1' }
     - { name: "net.core.somaxconn", value: '4096' }
     - { name: "vm.max_map_count", value: '262144' }
