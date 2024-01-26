@@ -95,7 +95,7 @@
 - name: Run the container for Node Exporter
   docker_container:
     name: node-exporter
-    image: prom/node-exporter:{{ node_exporter_version }}
+    image: "{{  node_exporter_base_image }}:{{ node_exporter_version }}"
     restart_policy: unless-stopped
     restart: true
     state: started
@@ -119,7 +119,7 @@
     name: vmagent
     state: started
 
-    image: victoriametrics/vmagent:{{ vmagent_version }}
+    image: "{{ vmagent_base_image }}:{{ vmagent_version }}"
     restart_policy: unless-stopped
     restart: true
 
@@ -141,7 +141,7 @@
     name: victoriametrics
     state: started
     restart: true
-    image: victoriametrics/victoria-metrics:{{ victoria_metrics_version }}
+    image: "{{  victoriametrics_base_image }}:{{ victoria_metrics_version }}"
     restart_policy: unless-stopped
     published_ports:
       - 8428:8428
@@ -170,7 +170,7 @@
     state: started
     restart: true
 
-    image: grafana/grafana:{{ grafana_version }}
+    image: "{{ grafana_base_image }}:{{ grafana_version }}"
     restart_policy: unless-stopped
     published_ports:
       - 3000:3000
@@ -185,7 +185,7 @@
 - name: Run the container for Vmalert
   docker_container:
     name: vmalert
-    image: victoriametrics/vmalert:{{ vmalert_version }}
+    image: "{{ vmalert_base_image }}:{{ vmalert_version }}"
     state: started
     restart: true
 
@@ -214,7 +214,7 @@
     state: started
     restart: true
 
-    image: prom/alertmanager:{{ alertmanager_version }}
+    image: "{{ alert_manager_base_image }}:{{ alertmanager_version }}"
     restart_policy: unless-stopped
     published_ports:
       - 9093:9093
