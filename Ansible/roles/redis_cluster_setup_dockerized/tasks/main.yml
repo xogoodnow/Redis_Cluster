@@ -33,12 +33,12 @@
 - name: Set the compose file for redis
   template:
     src: "templates/docker-compose.yaml.j2"
-    dest: "/root/redis/docker-compose.yaml"
+    dest: "{{ redis_directory_base_path }}Redis/Docker/docker-compose.yaml"
 
 
 - name: Run the containers
   community.general.docker_compose:
-    project_src: "/root/redis/"
+    project_src: "{{ redis_directory_base_path }}Redis/Docker/"
     pull: true
     recreate: never
     state: present
