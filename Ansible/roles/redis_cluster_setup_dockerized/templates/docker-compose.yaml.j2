@@ -7,6 +7,7 @@ services:
     volumes:
       - Redis/Data/{{ redis_master_port }}/:{{ redis_directory_base_path }}Redis/Data/{{ redis_master_port }}/
       - "{{ redis_directory_base_path }}Redis/Config/{{ redis_master_port }}/redis_{{ redis_master_port }}.conf:{{ redis_directory_base_path }}Redis/Config/{{ redis_master_port }}/redis_{{ redis_master_port }}.conf"
+      - "{{ redis_certificates_base_path }}:{{ redis_certificates_base_path }}"
 #      - /var/run/redis/redis_7000.pid:/var/run/redis/redis_7000.pid
 #      - /var/log/redis/redis_7000.log:/var/log/redis/redis_7000.log
     restart: unless-stopped
@@ -20,6 +21,7 @@ services:
     volumes:
       - "{{ redis_directory_base_path }}Redis/Data/{{ redis_slave_port }}/:{{ redis_directory_base_path }}Redis/Data/{{ redis_slave_port }}/"
       - "{{ redis_directory_base_path }}Redis/Config/{{ redis_slave_port }}/redis_{{ redis_slave_port }}.conf:{{ redis_directory_base_path }}Redis/Config/{{ redis_slave_port }}/redis_{{ redis_slave_port }}.conf"
+      - "{{ redis_certificates_base_path }}:{{ redis_certificates_base_path }}"
 #      - /var/run/redis/redis_7001.pid:/var/run/redis/redis_7001.pid
 #      - /var/log/redis/redis_7001.log:/var/log/redis/redis_7001.log
     restart: unless-stopped
