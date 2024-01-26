@@ -19,6 +19,8 @@
       include_role:
         name: "{{ item }}"
       with_items:
+        - $PWD/roles/redis_cluster_certificate_generation
+        - $PWD/roles/redis_cluster_pre_setup
         - $PWD/roles/redis_cluster_setup_dockerized
       when: mode == 'redis'
 
