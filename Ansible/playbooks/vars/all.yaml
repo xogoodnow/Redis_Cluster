@@ -13,3 +13,4 @@ redis_slave_port: 27001
 node_exporter_base_image: prom/node-exporter
 redis_certificates_base_path: /root/Redis/Certs/
 redis_directory_base_path: /root/
+redis_base_image: redis
