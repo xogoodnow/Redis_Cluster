@@ -26,14 +26,14 @@ cluster-enabled yes
 # to unlimited size. The default size is 20480.
 # tls-session-cache-size 5000
 
-tls-port {{ redis_slave_port }}
+tls-port {{ redis_master_port }}
 tls-cluster yes
-tls-cert-file {{ redis_certificates_base_path }}redis.crt
-tls-key-file {{ redis_certificates_base_path }}redis.key
-tls-ca-cert-file {{ redis_certificates_base_path }}ca.crt
+tls-cert-file {{ redis_mounted_certs_base_path }}redis.crt
+tls-key-file {{ redis_mounted_certs_base_path }}redis.key
+tls-ca-cert-file {{ redis_mounted_certs_base_path }}ca.crt
 tls-auth-clients no
 tls-replication yes
-~
+
 
 #   supervised systemd - signal systemd by writing READY=1 to $NOTIFY_SOCKET
 supervised no
@@ -120,7 +120,7 @@ rdb-del-sync-files no
 # The Append Only File will also be created inside this directory.
 #
 # Note that you must specify a directory here, not a file name.
-dir {{ redis_directory_base_path }}Redis/Data/{{ redis_slave_port }}/
+dir {{ redis_mounted_data_base_path }}{{ redis_slave_port }}/
 
 
 
