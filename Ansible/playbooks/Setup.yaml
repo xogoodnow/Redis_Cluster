@@ -14,13 +14,26 @@
         - $PWD/roles/redis_os_tuning
         - $PWD/roles/install_docker
 
+    - name: Prerequisite for redis cluster
+      include_role:
+        name: "{{ item }}"
+      with_items:
+        - $PWD/roles/redis_cluster_pre_setup
+      when: mode == 'redis'
+
+
+    - name: Generate certificates for redis
+      include_role:
+        name: "{{ item }}"
+      with_items:
+        - $PWD/roles/redis_cluster_certificate_generation
+      when: mode == 'redis' and init_cluster == 'true'
+
 
     - name: Install and Configure Redis instances
       include_role:
         name: "{{ item }}"
       with_items:
-        - $PWD/roles/redis_cluster_pre_setup
-        - $PWD/roles/redis_cluster_certificate_generation
         - $PWD/roles/redis_cluster_setup_dockerized
       when: mode == 'redis'
 
