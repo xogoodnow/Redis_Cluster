@@ -8,6 +8,7 @@
   copy:
     src: "files/{{ item }}"
     dest: "{{ redis_certificates_base_path }}"
+    mode: 777
     force: true
   with_items:
     - "ca.crt"
