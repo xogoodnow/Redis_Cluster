@@ -26,7 +26,7 @@ cluster-enabled yes
 # to unlimited size. The default size is 20480.
 # tls-session-cache-size 5000
 
-tls-port {{ redis_master_port }}
+tls-port {{ redis_slave_port }}
 tls-cluster yes
 tls-cert-file {{ redis_mounted_certs_base_path }}redis.crt
 tls-key-file {{ redis_mounted_certs_base_path }}redis.key
