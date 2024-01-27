@@ -18,18 +18,20 @@
     - "redis.csr"
     - "redis.key"
 
+- name:
+  debug:
+    msg: "{{ redis_base_image }}:{{ redis_version }}"
 
 
 - name: Pull the redis image
   docker_image:
-    name: "{{  redis_base_image }}:{{ redis_version }}"
+    name: "{{ redis_base_image }}:{{ redis_version }}"
     source: pull
-
 
 - name: Set the config file for Redis master instances
   template:
     dest: "{{ redis_directory_base_path }}Redis/Config/{{ redis_master_port }}/redis_{{ redis_master_port }}.conf"
-    src: templates/redis_27000.conf
+    src: templates/redis_27000.conf.j2
     mode: "0777"
 #  vars:
 #    redis_password: "{{ redis_password }}"
@@ -40,7 +42,7 @@
 - name: Set the config file for Redis slave instances
   template:
     dest: "{{ redis_directory_base_path }}Redis/Config/{{ redis_slave_port }}/redis_{{ redis_slave_port }}.conf"
-    src: templates/redis_7001.conf
+    src: templates/redis_27001.conf.j2
     mode: "0777"
 #  vars:
 #    redis_password: "{{ redis_password }}"
