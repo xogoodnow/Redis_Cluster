@@ -13,12 +13,20 @@
     name: "{{ redis_exporter_base_image }}:{{ redis_exporter_version }}"
     source: pull
 
-- name: Run the container for Redis Exporter
-  docker_container:
-    name: redis_exporter
-    image: "{{ redis_exporter_base_image }}:{{ redis_exporter_version }}"
-    restart_policy: unless-stopped
-    state: started
-    restart: true
-    command: "--redis.addr=localhost:{{ redis_master_port }} --is-cluster --redis.password='{{ redis_password }}'"
-    network_mode: host
+
+- name: Set the config file for Redis slave instances
+  template:
+    dest: "{{ redis_directory_base_path }}Redis/Exporter/Docker/docker-compose.yaml"
+    src: templates/redis_27001.conf.j2
+    mode: "0777"
+
+
+#- name: Run the container for Redis Exporter
+#  docker_container:
+#    name: redis_exporter
+#    image: "{{ redis_exporter_base_image }}:{{ redis_exporter_version }}"
+#    restart_policy: unless-stopped
+#    state: started
+#    restart: true
+#    command: "--redis.addr=localhost:{{ redis_master_port }} --is-cluster --redis.password='{{ redis_password }}'"
+#    network_mode: host
