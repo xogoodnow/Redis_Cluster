@@ -22,5 +22,8 @@ grafana_base_image: grafana/grafana
 vmalert_base_image: victoriametrics/vmalert
 alert_manager_base_image: prom/alertmanager
 redis_mounted_certs_base_path: /Redis/Certs/
+redis_exporter_certs_mounted_base_path: /Redis/Certs/
 redis_mounted_config_base_path: /Redis/Config/
 redis_mounted_data_base_path: /Redis/Data/
+redis_exporter_image_version: latest
+
