@@ -17,7 +17,7 @@
 - name: Set the config file for Redis slave instances
   template:
     dest: "{{ redis_directory_base_path }}Redis/Exporter/Docker/docker-compose.yaml"
-    src: templates/redis_27001.conf.j2
+    src: templates/docker-compose-exporter.yaml.j2
     mode: "0777"
 
 
