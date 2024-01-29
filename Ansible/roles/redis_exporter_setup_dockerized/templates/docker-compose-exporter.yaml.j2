@@ -5,7 +5,7 @@ services:
     image: "{{ redis_exporter_base_image }}:{{ redis_exporter_image_version }}"
     network_mode: host
     volumes:
-        - "{{ redis_directory_base_path }}{{ redis_certificates_base_path }}:{{ redis_exporter_certs_mounted_base_path }}"
+        - "{{ redis_certificates_base_path }}:{{ redis_exporter_certs_mounted_base_path }}"
     environment:
         REDIS_ADDR: "rediss://localhost:{{ redis_master_port }}"
         #REDIS_USER:
