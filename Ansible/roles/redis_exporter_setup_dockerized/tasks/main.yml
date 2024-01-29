@@ -21,12 +21,12 @@
     mode: "0777"
 
 
-#- name: Run the container for Redis Exporter
-#  docker_container:
-#    name: redis_exporter
-#    image: "{{ redis_exporter_base_image }}:{{ redis_exporter_version }}"
-#    restart_policy: unless-stopped
-#    state: started
-#    restart: true
-#    command: "--redis.addr=localhost:{{ redis_master_port }} --is-cluster --redis.password='{{ redis_password }}'"
-#    network_mode: host
+- name: Run the containers
+  community.general.docker_compose:
+    project_src: "{{ redis_directory_base_path }}Redis/Exporter/Docker/"
+    pull: true
+    recreate: never
+    state: present
+    restarted: false
+    remove_orphans: no
+    remove_volumes: false
