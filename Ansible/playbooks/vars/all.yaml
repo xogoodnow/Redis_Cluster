@@ -14,8 +14,8 @@ node_exporter_base_image: prom/node-exporter
 redis_certificates_base_path: /root/Redis/Certs/
 redis_directory_base_path: /root/
 redis_base_image: redis
-redis_non_tls_port_master: 0
-redis_non_yls_port_slave: 0
+redis_non_tls_port_master: 7000
+redis_non_tls_port_slave: 7001
 redis_exporter_base_image: bitnami/redis-exporter
 vmagent_base_image: victoriametrics/vmagent
 victoriametrics_base_image: victoriametrics/victoria-metrics
