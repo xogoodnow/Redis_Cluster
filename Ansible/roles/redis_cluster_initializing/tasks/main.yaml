@@ -5,12 +5,12 @@
 
 - name: Print the init command
   debug:
-    msg: "redis-cli --tls --cacert {{ redis_mounted_certs_base_path }}ca.crt --cluster create redis-1:{{ redis_master_port }} redis-2:{{ redis_master_port }} redis-3:{{ redis_master_port }} redis-1:{{ redis_slave_port }} redis-2:{{ redis_slave_port }} redis-3:{{ redis_slave_port }}  --cluster-replicas 1 --cluster-yes"
+    msg: "redis-cli --tls --cacert {{ redis_mounted_certs_base_path }}ca.crt --cluster create redis-1:{{ redis_master_port }} redis-2:{{ redis_master_port }} redis-3:{{ redis_master_port }} redis-1:{{ redis_slave_port }} redis-2:{{ redis_slave_port }} redis-3:{{ redis_slave_port }}  --cluster-replicas 1 --cluster-yes -a {{ redis_password }}"
     
 - name: Run a the init command
   community.docker.docker_container_exec:
     container: "redis-master-{{ ansible_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) +1 }}"
-    command: "redis-cli --tls --cacert {{ redis_mounted_certs_base_path }}ca.crt --cluster create redis-1:{{ redis_master_port }} redis-2:{{ redis_master_port }} redis-3:{{ redis_master_port }} redis-1:{{ redis_slave_port }} redis-2:{{ redis_slave_port }} redis-3:{{ redis_slave_port }}  --cluster-replicas 1 --cluster-yes"
+    command: "redis-cli --tls --cacert {{ redis_mounted_certs_base_path }}ca.crt --cluster create redis-1:{{ redis_master_port }} redis-2:{{ redis_master_port }} redis-3:{{ redis_master_port }} redis-1:{{ redis_slave_port }} redis-2:{{ redis_slave_port }} redis-3:{{ redis_slave_port }}  --cluster-replicas 1 --cluster-yes -a {{ redis_password }}"
   register: result
 
 - name: Print out the result of the init command
