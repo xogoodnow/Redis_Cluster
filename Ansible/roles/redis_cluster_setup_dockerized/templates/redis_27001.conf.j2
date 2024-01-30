@@ -132,8 +132,8 @@ dir {{ redis_mounted_data_base_path }}{{ redis_slave_port }}/
 # masterauth <master-password>
 #
 
-#requirepass {{ redis_password }}
-#masterauth {{ redis_password }}
+requirepass {{ redis_password }}
+masterauth {{ redis_password }}
 
 
 

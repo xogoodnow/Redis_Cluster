@@ -132,10 +132,11 @@ dir {{ redis_mounted_data_base_path }}{{ redis_master_port }}/
 # masterauth <master-password>
 #
 
-#requirepass {{ redis_password }}
-#masterauth {{ redis_password }}
+requirepass {{ redis_password }}
+masterauth {{ redis_password }}
 
 
+    
 
 # When a replica loses its connection with the master, or when the replication
 # is still in progress, the replica can act in two different ways:
