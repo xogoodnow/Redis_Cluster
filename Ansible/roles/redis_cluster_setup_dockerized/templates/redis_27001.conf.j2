@@ -1,6 +1,6 @@
 bind 0.0.0.0 ::1
 protected-mode no
-port {{ redis_non_tls_port }}
+port {{ redis_non_tls_port_slave }}
 cluster-enabled yes
 
 #value of somaxconn and tcp_max_syn_backlog
