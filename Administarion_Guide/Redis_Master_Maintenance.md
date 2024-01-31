@@ -23,7 +23,7 @@ This guide provides a detailed procedure for removing a master node from a Redis
 
 ### 3. **Remove the Master Node**
    - Execute the `del-node` command to remove the master node from the cluster.
-   - Command: <code>redis-cli --tls --cacert /root/Redis/Certs/ca.crt --key /root/Redis/Certs/redis.key --cert /root/Redis/Certs/redis.crt --cluster del-node <mark>[ANY-REDIS-HOST-NAME]:[REDIS-MASTER-PORT] [ID_OF_NODE_TO_BE_DELETED]</mark> -a "yourPassword"</code>
+   - Command: <code>redis-cli --tls --cacert /root/Redis/Certs/ca.crt --key /root/Redis/Certs/redis.key --cert /root/Redis/Certs/redis.crt --cluster del-node <mark>[ANY-REDIS-HOST-NAME]:[REDIS-MASTER-PORT]</mark> <mark>[ID_OF_NODE_TO_BE_DELETED]</mark> -a "yourPassword"</code>
    - Replace `[ID_OF_NODE_TO_BE_DELETED]` with the ID of the master node.
 
 ## Steps to Add the Master Node Back
