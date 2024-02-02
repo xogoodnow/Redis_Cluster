@@ -1,4 +1,3 @@
-
 # Redis Cluster Recovery Guide
 
 ## Introduction
@@ -22,17 +21,27 @@ This document outlines the process for recovering a Redis cluster following the 
 
 ### Step 1: **Identify Failed Nodes**
    - On `redis-1`, identify failed nodes by checking the cluster status.
-   - Command: `redis-cli --tls --cacert /root/Redis/Certs/ca.crt --key /root/Redis/Certs/redis.key --cert /root/Redis/Certs/redis.crt -p 27000 -a "yourPassword" cluster nodes`
+   - Command: <code>redis-cli --tls --cacert /root/Redis/Certs/ca.crt --key /root/Redis/Certs/redis.key --cert /root/Redis/Certs/redis.crt <mark>-h [HEALTHY_REDIS_MASTER_HOST] -p [HEALTHY_REDIS_MASTER_PORT]</mark> <mark>-a "[REDIS_CLUSTER_PASSWORD]"</mark> cluster nodes</code>
 
 ### Step 2: **Remove Failed Nodes**
    - Use the `CLUSTER FORGET` command for each failed node from `redis-1`.
    - Commands:
-     - For `redis-2`: `redis-cli --tls --cacert /root/Redis/Certs/ca.crt --key /root/Redis/Certs/redis.key --cert /root/Redis/Certs/redis.crt -h redis-1 -p 27000 -a "yourPassword" CLUSTER FORGET [FAILED_NODE_ID_OF_REDIS-2]`
-     - For `redis-3`: `redis-cli --tls --cacert /root/Redis/Certs/ca.crt --key /root/Redis/Certs/redis.key --cert /root/Redis/Certs/redis.crt -h redis-1 -p 27000 -a "yourPassword" CLUSTER FORGET [FAILED_NODE_ID_OF_REDIS-3]`
+     - For `redis-2`: <code>redis-cli --tls --cacert /root/Redis/Certs/ca.crt --key /root/Redis/Certs/redis.key --cert /root/Redis/Certs/redis.crt <mark>-h [HEALTHY_REDIS_MASTER_HOST] -p [HEALTHY_REDIS_MASTER_PORT]</mark> <mark>-a "[REDIS_CLUSTER_PASSWORD]"</mark> CLUSTER FORGET [FAILED_NODE_ID_OF_REDIS-2]</code>
+     - For `redis-3`: <code>redis-cli --tls --cacert /root/Redis/Certs/ca.crt --key /root/Redis/Certs/redis.key --cert /root/Redis/Certs/redis.crt <mark>-h [HEALTHY_REDIS_MASTER_HOST] -p [HEALTHY_REDIS_MASTER_PORT]</mark> <mark>-a "[REDIS_CLUSTER_PASSWORD]"</mark> CLUSTER FORGET [FAILED_NODE_ID_OF_REDIS-3]</code>
 
 ### Step 3: **Assign All Slots to Healthy Master**
    - Ensure all slots are reassigned to the healthy master on `redis-1`.
-   - Command: Use a loop to add each slot to the healthy master, adjusting the script as necessary.
+   - Command:
+     <code>for slot in {0..16383}; do
+         redis-cli --tls --cacert /root/Redis/Certs/ca.crt --key /root/Redis/Certs/redis.key --cert /root/Redis/Certs/redis.crt <mark>-h [HEALTHY_REDIS_MASTER_HOST] -p [HEALTHY_REDIS_MASTER_PORT]</mark> <mark>-a "[REDIS_CLUSTER_PASSWORD]"</mark> CLUSTER ADDSLOTS $slot
+     done</code>
+
+### Step 3.1: **Change slot states**
+   - Ensure all slots are in stable state.
+   - Command:
+     <code>for slot in {0..16383}; do
+         redis-cli --tls --cacert /root/Redis/Certs/ca.crt --key /root/Redis/Certs/redis.key --cert /root/Redis/Certs/redis.crt <mark>-h [HEALTHY_REDIS_MASTER_HOST] -p [HEALTHY_REDIS_MASTER_PORT]</mark> <mark>-a "[REDIS_CLUSTER_PASSWORD]"</mark> CLUSTER SETSLOT  $slot STABLE;
+     done</cod
 
 ### Step 4: **Clear Data on Failed Instances**
    - Stop Redis instances on `redis-2` and `redis-3`, clear their data, and then restart.
@@ -43,9 +52,15 @@ This document outlines the process for recovering a Redis cluster following the 
 
 ### Step 5: **Reintegrate Nodes and Balance Slots**
    - Add cleared nodes back to the cluster as slaves and then balance slots across all masters.
-   - Command for adding nodes back: `redis-cli --tls --cacert /root/Redis/Certs/ca.crt --key /root/Redis/Certs/redis.key --cert /root/Redis/Certs/redis.crt --cluster add-node [NEW_NODE_HOST]:[NEW_NODE_PORT] [REDIS-1_HOST]:[REDIS-1_PORT] -a "yourPassword"`
+   - Command for adding nodes back: <code>redis-cli --tls --cacert /root/Redis/Certs/ca.crt --key /root/Redis/Certs/redis.key --cert /root/Redis/Certs/redis.crt --cluster add-node <mark<[NEW_REDIS_INSTANCE_HOST]:[NEW_REDIS_INSTANCE_PORT]<mark> <mark>[HEALTHY_REDIS_MASTER_HOST]:[HEALTHY_REDIS_MASTER_PORT]<mark> <mark>-a "[REDIS_CLUSTER_PASSWORD]"</mark></code>
    - Use the `redis-cli --cluster rebalance` command with appropriate options to balance slots.
 
-## Conclusion
+### Additional Steps for Single Healthy Master Recovery
 
-This guide provides a systematic approach to recovering a Redis cluster after node failures, including steps for removing failed nodes, reassigning slots, and reintegrating nodes as slaves to restore the cluster to a fully operational state. Ensure all commands are carefully executed to prevent data loss and maintain cluster integrity.
+If the cluster is left with only one healthy master and no slaves, follow these steps:
+
+1. **Ensure All Slots are Assigned to the Healthy Master**
+   - Use the loop command provided in Step 3 to assign all slots to the healthy master.
+
+2. **Resolve Slots Stuck in Migrating State**
+   - If slots are stuck in migrating state
