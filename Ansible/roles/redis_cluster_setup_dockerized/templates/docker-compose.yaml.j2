@@ -18,6 +18,11 @@ services:
         hard: -1
     mem_limit: "{{ redis_memory_limit }}"
     cpus: "{{ redis_cpu_limit }}"
+    logging:
+      driver: json-file
+      options:
+        max-size: "{{ redis_max_log_size }}"
+
 
   redis-slave:
     container_name: "redis-slave-{{ ansible_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) + 1}}"
@@ -37,7 +42,10 @@ services:
         hard: -1
     mem_limit: "{{ redis_memory_limit }}"
     cpus: "{{ redis_cpu_limit }}"
-
+    logging:
+      driver: json-file
+      options:
+        max-size: "{{ redis_max_log_size }}"
 
 
 
