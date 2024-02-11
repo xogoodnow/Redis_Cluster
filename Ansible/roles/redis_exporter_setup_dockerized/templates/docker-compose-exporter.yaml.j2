@@ -26,6 +26,10 @@ services:
 
     restart: always
     #command:  --redis.addr=redis://localhost:27000 --connection-timeout=15s
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
 
     mem_limit: "{{ redis_exporter_memory_limit }}"
     cpus: "{{ redis_exporter_cpu_limit }}"
