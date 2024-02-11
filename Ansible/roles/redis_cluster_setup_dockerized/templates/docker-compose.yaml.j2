@@ -12,7 +12,10 @@ services:
 #      - /var/log/redis/redis_7000.log:/var/log/redis/redis_7000.log
     restart: unless-stopped
     network_mode: host
-
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
 
   redis-slave:
     container_name: "redis-slave-{{ ansible_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) + 1}}"
@@ -26,7 +29,10 @@ services:
 #      - /var/log/redis/redis_7001.log:/var/log/redis/redis_7001.log
     restart: unless-stopped
     network_mode: host
-
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
 
 
 
