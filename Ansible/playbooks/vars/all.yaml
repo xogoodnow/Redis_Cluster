@@ -30,5 +30,6 @@ redis_exporter_image_version: "latest"
 redis_memory_limit: "16g"
 redis_cpu_limit: "4"
 redis_max_log_size: "20g"
-redis_exporter_memory_limit: 4g
-redis_exporter_cpu_limit: 2
+redis_exporter_memory_limit: "4g"
+redis_exporter_cpu_limit: "2"
+redis_exporter_max_log_size: "10g"

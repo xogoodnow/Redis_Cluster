@@ -30,6 +30,10 @@ services:
       memlock:
         soft: -1
         hard: -1
+    logging:
+      driver: json-file
+      options:
+        max-size: "{{ redis_exporter_max_log_size }}"
 
     mem_limit: "{{ redis_exporter_memory_limit }}"
     cpus: "{{ redis_exporter_cpu_limit }}"
