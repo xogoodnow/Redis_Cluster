@@ -27,4 +27,5 @@ redis_exporter_certs_mounted_base_path: /Redis/Certs/
 redis_mounted_config_base_path: /Redis/Config/
 redis_mounted_data_base_path: /Redis/Data/
 redis_exporter_image_version: latest
-
+redis_memory_limit: 16g
+redis_cpu_limit: 4

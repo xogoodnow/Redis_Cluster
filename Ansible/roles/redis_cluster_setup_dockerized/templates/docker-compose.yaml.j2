@@ -16,6 +16,8 @@ services:
       memlock:
         soft: -1
         hard: -1
+    mem_limit: "{{ redis_memory_limit }}"
+    cpus: "{{ redis_cpu_limit }}"
 
   redis-slave:
     container_name: "redis-slave-{{ ansible_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) + 1}}"
@@ -33,6 +35,8 @@ services:
       memlock:
         soft: -1
         hard: -1
+    mem_limit: "{{ redis_memory_limit }}"
+    cpus: "{{ redis_cpu_limit }}"
 
 
 
