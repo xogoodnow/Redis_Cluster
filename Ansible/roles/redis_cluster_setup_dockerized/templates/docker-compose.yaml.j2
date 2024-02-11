@@ -1,4 +1,4 @@
-version: "3.8"
+version: "{{ docker_api_version }}"
 services:
   redis-master:
     container_name: "redis-master-{{ ansible_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) + 1}}"
