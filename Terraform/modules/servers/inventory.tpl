@@ -1,6 +1,6 @@
 all:
     children:
-        helsinki:
+        redis:
             hosts:
             %{ for index, ip in redis_ips }
                 redis-hel-${index}:
