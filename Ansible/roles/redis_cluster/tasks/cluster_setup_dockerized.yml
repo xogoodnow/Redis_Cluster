@@ -1,0 +1,73 @@
+---
+- name: check connectivity
+  ping:
+    data: alive
+
+
+- name: Copy the certs to the nodes
+  copy:
+    src: "files/{{ item }}"
+    dest: "{{ redis_certificates_base_path }}"
+    mode: "0777"
+    owner: root
+    group: root
+    force: true
+  with_items:
+    - "ca.crt"
+    - "ca.key"
+    - "cert.conf"
+    - "csr.conf"
+    - "redis.crt"
+    - "redis.csr"
+    - "redis.key"
+
+- name:
+  debug:
+    msg: "{{ redis_base_image }}:{{ redis_version }}"
+
+
+- name: Pull the redis image
+  docker_image:
+    name: "{{ redis_base_image }}:{{ redis_version }}"
+    source: pull
+
+- name: Set the config file for Redis master instances
+  template:
+    dest: "{{ redis_directory_base_path }}Redis/Config/{{ redis_master_port }}/redis_{{ redis_master_port }}.conf"
+    src: templates/redis_27000.conf.j2
+    mode: "0777"
+#  vars:
+#    redis_password: "{{ redis_password }}"
+#    redis_slave_port: "{{ redis_master_port }}"
+
+
+
+- name: Set the config file for Redis slave instances
+  template:
+    dest: "{{ redis_directory_base_path }}Redis/Config/{{ redis_slave_port }}/redis_{{ redis_slave_port }}.conf"
+    src: templates/redis_27001.conf.j2
+    mode: "0777"
+#  vars:
+#    redis_password: "{{ redis_password }}"
+#    redis_slave_port: "{{ redis_slave_port }}"
+
+
+- name: Set the compose file for redis
+  template:
+    src: "templates/docker-compose-redis-cluster.yaml.j2"
+    dest: "{{ redis_directory_base_path }}Redis/Docker/docker-compose.yaml"
+
+
+- name: Run the containers
+  community.general.docker_compose:
+    project_src: "{{ redis_directory_base_path }}Redis/Docker/"
+    pull: true
+    recreate: never
+    state: present
+    restarted: false
+    remove_orphans: no
+    remove_volumes: false
+
+
+
+

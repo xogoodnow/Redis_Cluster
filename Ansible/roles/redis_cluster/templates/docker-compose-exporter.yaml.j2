@@ -1,0 +1,39 @@
+version: "{{ docker_api_version }}"
+services:
+  redis-exporter:
+    container_name: "redis-exporter-{{ ansible_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) + 1}}"
+    image: "{{ redis_exporter_base_image }}:{{ redis_exporter_image_version }}"
+    network_mode: host
+    volumes:
+        - "{{ redis_certificates_base_path }}:{{ redis_exporter_certs_mounted_base_path }}"
+    environment:
+        REDIS_ADDR: "rediss://localhost:{{ redis_master_port }}"
+        #REDIS_USER:
+        #REDIS_PASSWORD:
+        REDIS_EXPORTER_DEBUG: "false"
+        REDIS_EXPORTER_LOG_FORMAT:  "json"
+        REDIS_EXPORTER_WEB_LISTEN_ADDRESS:  "0.0.0.0:9121"
+        REDIS_EXPORTER_REDIS_ONLY_METRICS:  "false"
+        REDIS_EXPORTER_INCL_SYSTEM_METRICS: "false"
+        REDIS_EXPORTER_PING_ON_CONNECT: "true"
+        REDIS_EXPORTER_IS_CLUSTER: "true"
+        REDIS_EXPORTER_SKIP_TLS_VERIFICATION:  "true"
+        REDIS_EXPORTER_TLS_CLIENT_KEY_FILE: "{{ redis_exporter_certs_mounted_base_path }}redis.key"
+        REDIS_EXPORTER_TLS_CLIENT_CERT_FILE: "{{ redis_exporter_certs_mounted_base_path }}redis.crt"
+        # REDIS_EXPORTER_TLS_SERVER_KEY_FILE: "/Redis/Certs/redis.key"
+        # REDIS_EXPORTER_TLS_SERVER_CERT_FILE: "/Redis/Certs/redis.crt"
+        REDIS_EXPORTER_TLS_CA_CERT_FILE: "{{ redis_exporter_certs_mounted_base_path }}ca.crt"
+
+    restart: always
+    #command:  --redis.addr=redis://localhost:27000 --connection-timeout=15s
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    logging:
+      driver: json-file
+      options:
+        max-size: "{{ redis_exporter_max_log_size }}"
+
+    mem_limit: "{{ redis_exporter_memory_limit }}"
+    cpus: "{{ redis_exporter_cpu_limit }}"

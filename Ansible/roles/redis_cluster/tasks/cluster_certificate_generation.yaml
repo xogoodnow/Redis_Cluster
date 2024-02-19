@@ -1,0 +1,69 @@
+---
+- name: Create Certificate Authority
+  command: "openssl req -x509 -sha256 -days 3560 -nodes -newkey rsa:4096 -subj '/CN=localhost' -keyout {{ redis_certificates_base_path }}ca.key -out {{ redis_certificates_base_path }}ca.crt"
+
+
+
+#openssl genrsa -out redis.key 4096
+
+- name: Generate an OpenSSL private key
+  command: "openssl genrsa -out {{ redis_certificates_base_path }}redis.key 4096"
+
+
+
+- name: Set the config file for cert csr
+  template:
+    src: templates/redis_cluster_csr.conf
+    dest: "{{ redis_certificates_base_path }}csr.conf"
+    mode: "0777"
+
+
+- name: Generate a CSR
+  command: "openssl req -new -key {{ redis_certificates_base_path }}redis.key -out {{ redis_certificates_base_path }}redis.csr -config {{ redis_certificates_base_path }}csr.conf"
+
+
+- name: Set the config file for csrt conf
+  template:
+    src: templates/redis_cluster_cert.conf
+    dest: "{{ redis_certificates_base_path }}cert.conf"
+    mode: "0777"
+
+
+
+- name: Generate SSL certificate With self signed CA
+  command: "openssl x509 -req -in {{ redis_certificates_base_path }}redis.csr -CA {{ redis_certificates_base_path }}ca.crt -CAkey {{ redis_certificates_base_path }}ca.key -CAcreateserial -out {{ redis_certificates_base_path }}redis.crt -days 3650 -sha256 -extfile {{ redis_certificates_base_path }}cert.conf"
+
+
+
+#openssl verify -verbose -CAfile ca.crt redis.crt
+- name: Verify the certificate
+  shell:
+    cmd: "openssl verify -verbose -CAfile {{ redis_certificates_base_path }}ca.crt {{ redis_certificates_base_path }}redis.crt"
+
+
+#openssl rsa -noout -modulus -in redis.key | openssl md5
+- name: Calculate the MD5 hash of the private key modulus
+  shell:
+    cmd: "openssl rsa -noout -modulus -in {{ redis_certificates_base_path }}redis.key | openssl md5"
+
+
+#openssl x509 -noout -modulus -in redis.crt | openssl md5
+- name: Calculate the MD5 hash of the certificate modulus
+  shell:
+    cmd: "openssl x509 -noout -modulus -in {{ redis_certificates_base_path }}redis.crt | openssl md5"
+
+
+
+- name: Fetch the certs
+  fetch:
+    src: "{{ redis_certificates_base_path }}/{{ item }}"
+    flat: true
+    dest: $PWD/roles/redis_cluster/files/
+  with_items:
+    - "ca.crt"
+    - "ca.key"
+    - "cert.conf"
+    - "csr.conf"
+    - "redis.crt"
+    - "redis.csr"
+    - "redis.key"

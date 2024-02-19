@@ -1,0 +1,18 @@
+- hosts: redis
+  tasks:
+    - name: Setting the requirements for redis cluster
+      include_tasks: cluster_pre_setup.yml
+
+    - name: Generating certificates for redis cluster
+      include_tasks: cluster_certificate_generation.yaml
+      delegate_to: "{{ ansible_play_hosts_all[0] }}"
+
+    - name: Setting up the cluster
+      include_tasks: cluster_setup_dockerized.yml
+
+    - name: Initializing the cluster
+      include_tasks: cluster_init.yaml
+      delegate_to: "{{ ansible_play_hosts_all[0] }}"
+
+    - name: Set up the redis exporter
+      include_tasks: exporter_setup.yml

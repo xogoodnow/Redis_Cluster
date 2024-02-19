@@ -1,0 +1,42 @@
+---
+- name: check connectivity
+  ping:
+    data: alive
+
+
+- name: Create the required directories
+  file:
+    path: "{{ redis_directory_base_path }}{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0777"
+  with_items:
+    - "Redis/"
+    - "Redis/Docker/"
+    - "Redis/Exporter/"
+    - "Redis/Exporter/Docker"
+    - "Redis/Config/"
+    - "Redis/Config/{{ redis_master_port }}/"
+    - "Redis/Config/{{ redis_slave_port }}/"
+    - "Redis/Certs/"
+    - "Redis/Data/{{ redis_master_port }}/"
+    - "Redis/Data/{{ redis_slave_port }}/"
+    - "Redis/Data/Logs/{{ redis_master_port }}/"
+    - "Redis/Data/Logs/{{ redis_slave_port }}/"
+
+
+
+- name: Create log and pid file
+  file:
+    mode: "0777"
+    state: touch
+    owner: root
+    group: root
+    force: true
+    path: "{{ redis_directory_base_path }}Redis/Config/{{ item }}"
+  with_items:
+    - "redis_{{ redis_master_port }}.pid"
+    - "redis_{{ redis_slave_port }}.pid"
+    - "redis_{{ redis_master_port }}.log"
+    - "redis_{{ redis_slave_port }}.log"
