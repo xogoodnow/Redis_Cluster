@@ -1,0 +1,11 @@
+---
+- name: setting up Redis cluster
+  hosts: all
+  become: true
+  tasks:
+    - name: Deply on all nodes
+      include_role:
+        name: "{{ item }}"
+      with_items:
+        - general
+        - redis_cluster
