@@ -1,11 +1,14 @@
 ---
-- name: setting up Redis cluster
+- name: General setup
   hosts: all
   become: true
-  tasks:
-    - name: Deply on all nodes
-      include_role:
-        name: "{{ item }}"
-      with_items:
-        - general
-        - redis_cluster
+  roles:
+    - role: general
+      tags: general-setup
+
+- name: setting up Redis cluster
+  hosts: redis
+  become: true
+  roles:
+    - role: redis_cluster
+      tags: redis-setup
