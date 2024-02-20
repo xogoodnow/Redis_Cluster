@@ -5,14 +5,17 @@
 
 - name: Generating certificates for redis cluster
   include_tasks: cluster_certificate_generation.yaml
-  delegate_to: "{{ groups[redis_group_name][0] }}"
+  run_once: true
+#  delegate_to: "{{ groups[redis_group_name][0] }}"
 
 - name: Setting up the cluster
   include_tasks: cluster_setup_dockerized.yaml
 
 - name: Initializing the cluster
   include_tasks: cluster_init.yaml
-  delegate_to: "{{ groups[redis_group_name][0] }}"
+  run_once: true
+#  delegate_to: "{{ groups[redis_group_name][0] }}"
+
 
 - name: Set up the redis exporter
   include_tasks: exporter_setup.yaml

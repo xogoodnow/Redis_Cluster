@@ -6,4 +6,4 @@
   include_tasks: install_docker.yaml
 
 - name: Install node exporter
-  include_tasks: node_exporter_setup.a
+  include_tasks: node_exporter_setup.yaml
