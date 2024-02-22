@@ -12,3 +12,11 @@
   roles:
     - role: redis_cluster
       tags: redis-setup
+
+- name: Set up the monitoring stack
+  include_role:
+    name: "{{ item }}"
+  with_items:
+    - $PWD/roles/victoria_metrics_setup_dockerized
+  when: mode == 'monitoring'
+
