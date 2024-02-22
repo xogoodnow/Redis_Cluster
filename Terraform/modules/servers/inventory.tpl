@@ -10,10 +10,12 @@ all:
                     init_cluster: ${index == 0 ? "'true'" : "'false'"}
             %{ endfor }
 
+        monitoring:
+          hosts:
             %{ for index, ip in monitoring_ips }
-                monitoring-hel-${index}:
-                    ansible_host: ${ip}
-                    ansible_user: root
-                    mode: 'monitoring'
-                    init_cluster: 'false'
+              monitoring-hel-${index}:
+                  ansible_host: ${ip}
+                  ansible_user: root
+                  mode: 'monitoring'
+                  init_cluster: 'false'
             %{ endfor }
